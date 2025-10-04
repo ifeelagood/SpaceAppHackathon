@@ -10,12 +10,16 @@
     "test": "jest",
     "build": "tsc",
     "watch": "tsc --watch",
-      "start": "node dist/main.js"
+    "start": "node dist/main.js"
   },
   "dependencies": {
     "express": "^5.1.0",
+    "fs": "^0.0.1-security",
     "jest": "^30.2.0",
     "react": "^19.2.0",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.2"
   }
 }
