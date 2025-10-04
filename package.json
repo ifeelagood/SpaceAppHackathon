@@ -20,6 +20,16 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@types/node": "^24.6.2"
-  }
+    "@types/node": "^24.6.2",
+    "@types/react": "^19.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ifeelagood/SpaceAppHackathon.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/ifeelagood/SpaceAppHackathon/issues"
+  },
+  "homepage": "https://github.com/ifeelagood/SpaceAppHackathon#readme"
 }
