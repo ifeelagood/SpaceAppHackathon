@@ -1,3 +1,11 @@
-import { getEventGraph, loadEventGraphFromFile } from "./game/event.js";
+import React from "react";
 
-loadEventGraphFromFile("res/events.csv", "res/options.csv");
+function App() {
+  return (
+    <div>
+      <h1>Hello World</h1>
+    </div>
+  );
+}
+
+export default App;
