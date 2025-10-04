@@ -7,7 +7,9 @@
   "type": "module",
   "main": "main.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc",
+    "watch": "tsc --watch"
   },
   "dependencies": {
     "express": "^5.1.0",
