@@ -1,48 +1,80 @@
 import fs from "node:fs";
 
-const eventGraph = {
-  nodes: [],
-  edges: [],
-  adjacencyList: new Map()  // id -> array of ids
-};
+import { parseCSV} from "../util/csv.js";
+import type { CSVRow } from "../util/csv.js";
 
-function getEventGraph() {
-  return eventGraph;
+// Nodes must include an "id" column
+type NodeRow = CSVRow & { id: string, description: string };
+
+// Edges must include "from" and "to" columns (node ids)
+type EdgeRow = CSVRow & { from: string; to: string, optionText: string, condition: string };
+
+type NodeId = string;
+
+interface EventGraph {
+  nodes: NodeRow[];
+  edges: EdgeRow[];
+  adjacencyList: Map<NodeId, NodeId[]>;
 }
 
-function parseCSV(csv: string) {
-  const rows = csv
-    .trim()
-    .replace(/\r/g, '')
-    .split("\n")
-    .map(line => line.split(","));
+function loadEventGraphFromFile(nodeFilename: string, edgeFilename: string): EventGraph {
+  const eventGraph: EventGraph = {
+    nodes: [],
+    edges: [],
+    adjacencyList: new Map<NodeId, NodeId[]>()
+  };
 
-  const header = rows[0];
-  const dataRows = rows.slice(1);
-
-  if (header === undefined) return [];
-
-  return dataRows.map(row => {
-    const obj: Record<string, string> = {};
-    header.forEach((key, i) => {
-      obj[key] = row[i] ?? "";
-    });
-    return obj;
-  });
-}
-
-function loadEventGraphFromFile(nodeFilename: string, edgeFilename: string) {
-
+  // Reset
   eventGraph.nodes = [];
   eventGraph.edges = [];
-  eventGraph.adjacencyList = new Map();
+  eventGraph.adjacencyList = new Map<NodeId, NodeId[]>();
 
-  const nodeCsv = parseCSV(fs.readFileSync(nodeFilename, 'utf-8'));
-  const edgeCsv = parseCSV(fs.readFileSync(nodeFilename, 'utf-8'));
+  // Read and parse
+  const nodeCsv = parseCSV(fs.readFileSync(nodeFilename, "utf-8"));
+  const edgeCsv = parseCSV(fs.readFileSync(edgeFilename, "utf-8")); // fixed: was nodeFilename
 
+  // Validate nodes: require "id"
+  const nodes: NodeRow[] = [];
   for (const record of nodeCsv) {
-    console.log(record);
+    if (!record.id || record.id.trim() === "") {
+      throw new Error(`Node row missing required "id": ${JSON.stringify(record)}`);
+    }
+    nodes.push(record as NodeRow);
   }
+  eventGraph.nodes = nodes;
+
+  // Track existing node ids
+  const seenNodes = new Set<string>(nodes.map((n) => n.id));
+
+  // Validate edges: require "from","to" and refer to existing nodes
+  const edges: EdgeRow[] = [];
+  for (const record of edgeCsv) {
+    const from = record.from;
+    const to = record.to;
+
+    if (!from || !to) {
+      throw new Error(`Edge row missing "from" or "to": ${JSON.stringify(record)}`);
+    }
+    if (!seenNodes.has(from)) {
+      throw new Error(`Edge refers to unknown "from" node id: ${from}`);
+    }
+    if (!seenNodes.has(to)) {
+      throw new Error(`Edge refers to unknown "to" node id: ${to}`);
+    }
+
+    edges.push(record as EdgeRow);
+  }
+  eventGraph.edges = edges;
+
+  // Build adjacency list
+  for (const nodeId of seenNodes) {
+    eventGraph.adjacencyList.set(nodeId, []);
+  }
+  for (const { from, to } of edges) {
+    eventGraph.adjacencyList.get(from)!.push(to);
+  }
+
+  return eventGraph;
 }
 
 // const eventNodeExample = {
@@ -58,4 +90,5 @@ function loadEventGraphFromFile(nodeFilename: string, edgeFilename: string) {
 // };
 
 
-export { getEventGraph, loadEventGraphFromFile }
+export { loadEventGraphFromFile }
+export type { EventGraph, NodeRow, EdgeRow, NodeId }
