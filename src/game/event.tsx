@@ -1,5 +1,3 @@
-import fs from "fs";
-
 import { parseCSV} from "../util/csv.js";
 import type { CSVRow } from "../util/csv.js";
 
@@ -16,14 +14,14 @@ class EventGraph {
   public edges: EdgeRow[] = [];
   public adjacencyList: Map<NodeId, NodeId[]> = new Map<NodeId, NodeId[]>();
   
-  constructor(nodeFilename : string, edgeFilename: string) {
+  constructor(nodeCsvText : string, edgeCsvText: string) {
     this.nodes = [];
     this.edges = [];
     this.adjacencyList = new Map<NodeId, NodeId[]>();
 
     // Read and parse
-    const nodeCsv = parseCSV(fs.readFileSync(nodeFilename, "utf-8"));
-    const edgeCsv = parseCSV(fs.readFileSync(edgeFilename, "utf-8")); // fixed: was nodeFilename
+    const nodeCsv = parseCSV(nodeCsvText);
+    const edgeCsv = parseCSV(edgeCsvText); // fixed: was nodeFilename
 
     // Validate nodes: require "id"
 
