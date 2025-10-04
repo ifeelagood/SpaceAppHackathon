@@ -15,7 +15,5 @@ class GameState {
 
   constructor() {
     this.eventGraph = new EventGraph(eventCsvContent, optionsCsvContent);
-
-
   }
 }
