@@ -11,71 +11,60 @@ type EdgeRow = CSVRow & { from: string; to: string, optionText: string, conditio
 
 type NodeId = string;
 
-interface EventGraph {
-  nodes: NodeRow[];
-  edges: EdgeRow[];
-  adjacencyList: Map<NodeId, NodeId[]>;
+class EventGraph {
+  public nodes: NodeRow[] = [];
+  public edges: EdgeRow[] = [];
+  public adjacencyList: Map<NodeId, NodeId[]> = new Map<NodeId, NodeId[]>();
+  
+  constructor(nodeFilename : string, edgeFilename: string) {
+    this.nodes = [];
+    this.edges = [];
+    this.adjacencyList = new Map<NodeId, NodeId[]>();
+
+    // Read and parse
+    const nodeCsv = parseCSV(fs.readFileSync(nodeFilename, "utf-8"));
+    const edgeCsv = parseCSV(fs.readFileSync(edgeFilename, "utf-8")); // fixed: was nodeFilename
+
+    // Validate nodes: require "id"
+
+    for (const record of nodeCsv) {
+      if (!record.id || record.id.trim() === "") {
+        throw new Error(`Node row missing required "id": ${JSON.stringify(record)}`);
+      }
+      this.nodes.push(record as NodeRow);
+    }
+
+    // Track existing node ids
+    const seenNodes = new Set<string>(this.nodes.map((n) => n.id));
+
+    // Validate edges: require "from","to" and refer to existing nodes
+    for (const record of edgeCsv) {
+      const from = record.from;
+      const to = record.to;
+
+      if (!from || !to) {
+        throw new Error(`Edge row missing "from" or "to": ${JSON.stringify(record)}`);
+      }
+      if (!seenNodes.has(from)) {
+        throw new Error(`Edge refers to unknown "from" node id: ${from}`);
+      }
+      if (!seenNodes.has(to)) {
+        throw new Error(`Edge refers to unknown "to" node id: ${to}`);
+      }
+
+      this.edges.push(record as EdgeRow);
+    }
+
+    // Build adjacency list
+    for (const nodeId of seenNodes) {
+      this.adjacencyList.set(nodeId, []);
+    }
+    for (const { from, to } of this.edges) {
+      this.adjacencyList.get(from)!.push(to);
+    }
+  }
 }
 
-function loadEventGraphFromFile(nodeFilename: string, edgeFilename: string): EventGraph {
-  const eventGraph: EventGraph = {
-    nodes: [],
-    edges: [],
-    adjacencyList: new Map<NodeId, NodeId[]>()
-  };
-
-  // Reset
-  eventGraph.nodes = [];
-  eventGraph.edges = [];
-  eventGraph.adjacencyList = new Map<NodeId, NodeId[]>();
-
-  // Read and parse
-  const nodeCsv = parseCSV(fs.readFileSync(nodeFilename, "utf-8"));
-  const edgeCsv = parseCSV(fs.readFileSync(edgeFilename, "utf-8")); // fixed: was nodeFilename
-
-  // Validate nodes: require "id"
-  const nodes: NodeRow[] = [];
-  for (const record of nodeCsv) {
-    if (!record.id || record.id.trim() === "") {
-      throw new Error(`Node row missing required "id": ${JSON.stringify(record)}`);
-    }
-    nodes.push(record as NodeRow);
-  }
-  eventGraph.nodes = nodes;
-
-  // Track existing node ids
-  const seenNodes = new Set<string>(nodes.map((n) => n.id));
-
-  // Validate edges: require "from","to" and refer to existing nodes
-  const edges: EdgeRow[] = [];
-  for (const record of edgeCsv) {
-    const from = record.from;
-    const to = record.to;
-
-    if (!from || !to) {
-      throw new Error(`Edge row missing "from" or "to": ${JSON.stringify(record)}`);
-    }
-    if (!seenNodes.has(from)) {
-      throw new Error(`Edge refers to unknown "from" node id: ${from}`);
-    }
-    if (!seenNodes.has(to)) {
-      throw new Error(`Edge refers to unknown "to" node id: ${to}`);
-    }
-
-    edges.push(record as EdgeRow);
-  }
-  eventGraph.edges = edges;
-
-  // Build adjacency list
-  for (const nodeId of seenNodes) {
-    eventGraph.adjacencyList.set(nodeId, []);
-  }
-  for (const { from, to } of edges) {
-    eventGraph.adjacencyList.get(from)!.push(to);
-  }
-
-  return eventGraph;
-}
 
 // const eventNodeExample = {
 //   id: "start",
@@ -90,5 +79,4 @@ function loadEventGraphFromFile(nodeFilename: string, edgeFilename: string): Eve
 // };
 
 
-export { loadEventGraphFromFile }
-export type { EventGraph, NodeRow, EdgeRow, NodeId }
+export { EventGraph }
