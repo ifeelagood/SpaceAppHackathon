@@ -1,0 +1,5 @@
+eventId,to,optionText,condition,effect,EffectDesc
+StartScreen,Initial_investigate,Assign Researchers and Investigate Further,,reduce Money 20%,"More resources are put towards research efforts, new observations are recorded, prediction confidence increases!"
+StartScreen,media_1,Release current data and predictions to the media,,Social goes down 10%,"A media package is released to publishers, news spreads online, people are uneasy"
+StartScreen,DoNothing_1,"Do nothing, it'll all be fine",,nothing happens?,Life continues as it always has...
+Initial_investigate,ActNow,"Should we act now, or try to understand the issue better?",,,

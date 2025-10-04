@@ -1,0 +1,10 @@
+id,description,isEnd
+StartScreen,You are playing the game and will make some choices,FALSE
+Initial_investigate,"More resources are put into research efforts, money is spent, time passes - we understand more...",FALSE
+media_1,Spend to influence media and improve public opinion and relations.,FALSE
+DoNothing_1,Save money with inaction.,FALSE
+invest_public_image,Spend on bostering public image/relations,FALSE
+invest_early _action,Spend a large amount of money on an a good chance of succesful deflection,FALSE
+invest_late_action,Spend an even larger amount of money on delection with even less chance,FALSE
+invest_research,Invest now on increasing knowledge to improve future the no returns in short term ,FALSE
+invest_defense,Spend to improve defense capabilities now,FALSE
