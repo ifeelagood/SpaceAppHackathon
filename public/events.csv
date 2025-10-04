@@ -1,4 +1,0 @@
-id,description,isEnd
-StartScreen,You are playing the game and will make some choices,FALSE
-Initial_investigate,"More resources are put into research efforts, money is spent, time passes - we understand more...",FALSE
-ActNow,act now,FALSE

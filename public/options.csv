@@ -1,3 +1,0 @@
-from,to,optionText,condition,effect,EffectDesc
-StartScreen,Initial_investigate,Assign Researchers and Investigate Further,,reduce Money 20%,"More resources are put towards research efforts, new observations are recorded, prediction confidence increases!"
-Initial_investigate,ActNow,"Should we act now, or try to understand the issue better?",,,
