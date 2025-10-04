@@ -1,4 +1,4 @@
-import fs from "node:fs";
+import fs from "fs";
 
 import { parseCSV} from "../util/csv.js";
 import type { CSVRow } from "../util/csv.js";
