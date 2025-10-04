@@ -80,3 +80,4 @@ class EventGraph {
 
 
 export { EventGraph }
+export type { NodeId, NodeRow, EdgeRow }
