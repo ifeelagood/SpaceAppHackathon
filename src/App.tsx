@@ -1,9 +1,58 @@
 import { Button } from "./components/ui/button";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import { StatusBar } from "./components/StatusBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+
+import  { EventGraph } from "./EventGraph.js"
+import type { EventGraphProps, NodeId, NodeRow, EdgeRow  } from "./EventGraph.js";
+import { Resources }  from "./game/resource.js"
+
+
 
 export default function App() {
+  console.log("start");
+ 
+
+  const [eventCsvContent, setEventCsvContent] = useState<string>("");
+  const [optionCsvContent, setOptionCsvContent] = useState<string>("");
+
+  
+  useEffect(() => {
+    fetch("/events.csv")
+    .then(res => res.text())
+    .then(text => setEventCsvContent(text))
+
+    fetch("/options.csv")
+    .then(res => res.text())
+    .then(text => setOptionCsvContent(text))
+  }, []);
+  
+
+
+  console.log(eventCsvContent);
+
+  const isConditionMet = (edge : EdgeRow) => { return true };
+
+  const onNavigate =  (from: NodeId, to: NodeId, via: EdgeRow) => {};
+
+
+  const eventGraphProps : EventGraphProps = {
+    nodeCsvText: eventCsvContent,
+    edgeCsvText: optionCsvContent,
+    isConditionMet: isConditionMet,
+    hideBlockedOptions: false,
+    initialNodeId: "StartScreen",
+    onNavigate: onNavigate,
+    className: "eventgraph"
+    
+  };
+  
+  const eventGraph = EventGraph(eventGraphProps);
+  console.log(eventGraph);
+
+  const resources: Resources = new Resources();
+
   const [money, setMoney] = useState(100);
   const [pValue, setPValue] = useState(65);
   const [dValue, setDValue] = useState(42);
