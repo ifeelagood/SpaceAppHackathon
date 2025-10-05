@@ -17,3 +17,5 @@ class GameState {
     this.eventGraph = new EventGraph(eventCsvContent, optionsCsvContent);
   }
 }
+
+export { GameState };

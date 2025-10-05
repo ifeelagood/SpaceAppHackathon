@@ -1,0 +1,10 @@
+id,description,isEnd
+StartScreen,You are playing the game and will make some choices,FALSE
+StartScreen,Establishing Scene: \\  It is late-2016 - date of discovery \\   “An announcement from Mt Lemmon Observatory (Arizona) is made of the discovery” \\   What do you do? \\   [ We have only a rough Idea of the certainty of impact : Year ~2100 <1% ] \\ What do you do?,FALSE
+StartA,"[Intermediate Screen] \\ “More research is done, we understand the issue better” \\ Expected Impact: more specific date and impact scenario",FALSE
+StartB,Public response is not positive.. \\   Spend time/money on PR?,FALSE
+NothingA,An Amateur astronomer discovers it from their backyard and figures out it will impact  \\ Public Fear!,FALSE
+SlowResearch,Research is slow \\ Public support is difficult to maintain,FALSE
+ImpactKnown,"Impact is certain \\ The world is in panic, although many decades remain until impact \\ What do we do? ",FALSE
+CountriesA,Other Countries come across the observing data. \\  Word comes out that you haven’t acted. \\ They begin their own plans,FALSE
+UNint,"[Intermediate Screen] \\  The world comes together to discuss a solution \\  Due to the disapproval of your country, there is little trust in your confidence. \\  No consensus is reached. \\ ",FALSE
