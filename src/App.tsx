@@ -4,52 +4,13 @@ import { StatusBar } from "./components/StatusBar";
 import { useState, useEffect } from "react";
 
 
-import  { EventGraph } from "./EventGraph.js"
-import type { EventGraphProps, NodeId, NodeRow, EdgeRow  } from "./EventGraph.js";
 import { Resources }  from "./game/resource.js"
 
+import { WebEventGraph } from "./components/EventGraph.js";
 
 
 export default function App() {
-  console.log("start");
- 
 
-  const [eventCsvContent, setEventCsvContent] = useState<string>("");
-  const [optionCsvContent, setOptionCsvContent] = useState<string>("");
-
-  
-  useEffect(() => {
-    fetch("/events.csv")
-    .then(res => res.text())
-    .then(text => setEventCsvContent(text))
-
-    fetch("/options.csv")
-    .then(res => res.text())
-    .then(text => setOptionCsvContent(text))
-  }, []);
-  
-
-
-  console.log(eventCsvContent);
-
-  const isConditionMet = (edge : EdgeRow) => { return true };
-
-  const onNavigate =  (from: NodeId, to: NodeId, via: EdgeRow) => {};
-
-
-  const eventGraphProps : EventGraphProps = {
-    nodeCsvText: eventCsvContent,
-    edgeCsvText: optionCsvContent,
-    isConditionMet: isConditionMet,
-    hideBlockedOptions: false,
-    initialNodeId: "StartScreen",
-    onNavigate: onNavigate,
-    className: "eventgraph"
-    
-  };
-  
-  const eventGraph = EventGraph(eventGraphProps);
-  console.log(eventGraph);
 
   const resources: Resources = new Resources();
 
@@ -89,6 +50,8 @@ export default function App() {
           <div className="text-foreground">{currentDate}</div>
         </div>
 
+
+
         {/* Right Section - D and R Status (Vertically Stacked) */}
         <div className="flex flex-col gap-2 flex-1 items-end">
           <StatusBar label="🛡" value={dValue} />
@@ -104,6 +67,8 @@ export default function App() {
           alt="Map"
           className="absolute inset-0 w-full h-full object-cover opacity-40"
         />
+
+        <WebEventGraph/>
 
         {/* Text Prompt */}
         <div className="relative z-10 max-w-2xl mx-auto px-8 py-6 bg-card/80 backdrop-blur-sm rounded-lg border border-border shadow-lg">

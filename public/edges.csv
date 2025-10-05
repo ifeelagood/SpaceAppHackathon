@@ -1,0 +1,4 @@
+from,to,optionText,condition,EffectDesc,time,money,reputation,Defense,research,effects
+StartScreen,StartA,Investigate Further,,"More resources are put towards research efforts, new observations are recorded, prediction confidence increases!",3,-15,0,0,0,0
+StartScreen,StartB,Tell the Media,,"A media package is released to publishers, news spreads online, people are uneasy",0.5,0,-10,0,0,0
+
